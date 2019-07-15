@@ -1,5 +1,7 @@
 package sg.np.edu.twistmanga;
 
+import java.util.List;
+
 public class Manga {
     private String mangaTitle;
     private String image_url;

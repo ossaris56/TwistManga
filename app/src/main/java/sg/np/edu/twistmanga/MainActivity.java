@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 3);
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         mangaList = new ArrayList<>();
 
@@ -70,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
                        mangaList.add(manga);
                    }
                    mangaAdapter = new MangaAdapter(mangaList, getApplicationContext());
+                   recyclerView.setAdapter(mangaAdapter);
                }
                catch (JSONException e) {
                    e.printStackTrace();

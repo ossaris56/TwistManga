@@ -39,7 +39,7 @@ public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.ViewHolder>{
         final Manga manga = mangaList.get(position);
         holder.mangaTitle.setText(manga.getTitle());
 
-        Picasso.get().load(manga.getImage()).into(holder.mangaImg);
+        Picasso.get().load(manga.getImage()).placeholder(R.drawable.noimage).into(holder.mangaImg);
 
     }
 
