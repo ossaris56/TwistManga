@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,16 +52,17 @@ public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.ViewHolder>{
 
     public class ViewHolder extends RecyclerView.ViewHolder
     {
-        ImageView mangaImg;
-        TextView mangaTitle;
-        CardView cv;
+        public ImageView mangaImg;
+        public TextView mangaTitle;
+        public LinearLayout linearLayout;
+
 
         public ViewHolder(View itemView)
         {
             super(itemView);
-            mangaImg = (ImageView)itemView.findViewById(R.id.mangaImg);
-            mangaTitle = (TextView)itemView.findViewById(R.id.mangaTitle);
-            cv = (CardView)itemView.findViewById(R.id.mangaCV);
+            mangaImg = itemView.findViewById(R.id.mangaImg);
+            mangaTitle = itemView.findViewById(R.id.mangaTitle);
+            linearLayout = itemView.findViewById(R.id.mangaLinear);
         }
 
     }

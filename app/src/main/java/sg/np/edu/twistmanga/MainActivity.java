@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -21,12 +22,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     MangaAdapter mangaAdapter;
-    ArrayList<Manga> mangaList;
+    List<Manga> mangaList;
     private static final String URL_DATA = "https://www.mangaeden.com/api/list/0/?p=1";
 
 
@@ -59,12 +61,12 @@ public class MainActivity extends AppCompatActivity {
                try {
                    JSONObject jsonObject = new JSONObject(response);
 
-                   JSONArray array = jsonObject.getJSONArray("mangaInfo");
+                   JSONArray array = jsonObject.getJSONArray("manga");
 
                    for (int i=0; i < array.length(); i++) {
                        JSONObject jo = array.getJSONObject(i);
 
-                       Manga manga = new Manga(jo.getString("t"), jo.getString("im"));
+                       Manga manga = new Manga(jo.getString("t"), ("https://cdn.mangaeden.com/mangasimg/" + jo.getString("im")));
                        mangaList.add(manga);
                    }
                    mangaAdapter = new MangaAdapter(mangaList, getApplicationContext());
