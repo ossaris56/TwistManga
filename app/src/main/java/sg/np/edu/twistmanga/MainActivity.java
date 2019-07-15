@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 3);
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setHasFixedSize(true);
+        recyclerView.addItemDecoration(new SpacesItemDecoration(1));
 
         mangaList = new ArrayList<>();
 
@@ -85,4 +86,6 @@ public class MainActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
+
+
 }
