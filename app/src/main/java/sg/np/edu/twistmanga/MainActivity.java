@@ -6,8 +6,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -29,9 +31,8 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     MangaAdapter mangaAdapter;
     List<Manga> mangaList;
+    RecyclerViewAdapter adapter;
     private static final String URL_DATA = "https://www.mangaeden.com/api/list/0/?p=1";
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +44,20 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new SpacesItemDecoration(1));
-
         mangaList = new ArrayList<>();
-
         loadUrlJson();
+        adapter = new RecyclerViewAdapter();
+        recyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(new RecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+                //View view, int position
+                Intent intent = new Intent(MainActivity.this,Manga_details.class);
+                startActivity(intent);
+                Toast tt = Toast.makeText(MainActivity.this, "This is working",Toast.LENGTH_LONG);
+                tt.show();
+            }
+        });
     }
 
     private void loadUrlJson() {
