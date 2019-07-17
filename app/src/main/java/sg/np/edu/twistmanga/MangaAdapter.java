@@ -41,6 +41,7 @@ public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.ViewHolder>{
 
         Picasso.get().load(manga.getImage()).placeholder(R.drawable.noimage).into(holder.mangaImg);
 
+
     }
 
     @Override
