@@ -2,6 +2,7 @@ package sg.np.edu.twistmanga;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,15 @@ public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.ViewHolder>{
         holder.mangaTitle.setText(manga.getTitle());
 
         Picasso.get().load(manga.getImage()).placeholder(R.drawable.noimage).into(holder.mangaImg);
+        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent mangaDetailsIntent = new Intent(context, Manga_details.class);
+                mangaDetailsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(mangaDetailsIntent);
+
+            }
+        });
 
 
     }
