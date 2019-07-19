@@ -32,7 +32,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class Favourites extends AppCompatActivity {
 
     RecyclerView recyclerView;
     MangaAdapter mangaAdapter;
@@ -43,11 +43,10 @@ public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle abdt;
     DBHandler db = new DBHandler(this,null,null,1);
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_favourites);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
@@ -85,22 +84,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        recyclerView = findViewById(R.id.mangaRV);
+        recyclerView = findViewById(R.id.favRV);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 3);
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new SpacesItemDecoration(1));
         mangaList = new ArrayList<>();
-        loadUrlJson();
+        showFavourites();
         adapter = new RecyclerViewAdapter();
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new RecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
                 //View view, int position
-                Intent intent = new Intent(MainActivity.this,Manga_details.class);
+                Intent intent = new Intent(v.getContext(),Manga_details.class);
                 startActivity(intent);
-                Toast tt = Toast.makeText(MainActivity.this, "This is working",Toast.LENGTH_LONG);
+                Toast tt = Toast.makeText(v.getContext(), "This is working",Toast.LENGTH_LONG);
                 tt.show();
             }
         });
@@ -112,49 +111,51 @@ public class MainActivity extends AppCompatActivity {
         return abdt.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
-    private void loadUrlJson() {
+    public void showFavourites(){
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading...");
         progressDialog.show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_DATA, new Response.Listener<String>() {
-           @Override
-           public void onResponse(String response) {
-               progressDialog.dismiss();
-               try {
-                   JSONObject jsonObject = new JSONObject(response);
+            @Override
+            public void onResponse(String response) {
+                progressDialog.dismiss();
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
 
-                   JSONArray array = jsonObject.getJSONArray("manga");
+                    JSONArray array = jsonObject.getJSONArray("manga");
 
-                   for (int i=0; i < array.length(); i++) {
-                       JSONObject jo = array.getJSONObject(i);
+                    for (int i=0; i < array.length(); i++) {
+                        JSONObject jo = array.getJSONObject(i);
+                        if(db.isFavourite(jo.getString("t"))){
+                            Manga manga = new Manga(jo.getString("t"), ("https://cdn.mangaeden.com/mangasimg/" + jo.getString("im")), jo.getString("c"));
+                            mangaList.add(manga);
+                        }
+                    }
 
-                       Manga manga = new Manga(jo.getString("t"), ("https://cdn.mangaeden.com/mangasimg/" + jo.getString("im")), jo.getString("c"));
-                       mangaList.add(manga);
-                   }
+                    //Sort in alphabetical order
+                    Collections.sort(mangaList, new Comparator<Manga>() {
+                        @Override
+                        public int compare(Manga m1, Manga m2) {
+                            return m1.getTitle().compareTo(m2.getTitle());
+                        }
+                    });
 
-                   //Sort in alphabetical order
-                   Collections.sort(mangaList, new Comparator<Manga>() {
-                       @Override
-                       public int compare(Manga m1, Manga m2) {
-                           return m1.getTitle().compareTo(m2.getTitle());
-                       }
-                   });
-
-                   mangaAdapter = new MangaAdapter(mangaList, getApplicationContext(),db);
-                   recyclerView.setAdapter(mangaAdapter);
-               }
-               catch (JSONException e) {
-                   e.printStackTrace();
-               }
-           }
+                    mangaAdapter = new MangaAdapter(mangaList, getApplicationContext(),db);
+                    recyclerView.setAdapter(mangaAdapter);
+                }
+                catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error ) {
-                Toast.makeText(MainActivity.this, "Error" + error.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Error" + error.toString(), Toast.LENGTH_SHORT).show();
             }
         });
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
 }
+

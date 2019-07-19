@@ -22,10 +22,12 @@ public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.ViewHolder>{
 
     private List<Manga> mangaList;
     private Context context;
+    private DBHandler db;
 
-    public MangaAdapter(List<Manga> mangaList, Context context) {
+    public MangaAdapter(List<Manga> mangaList, Context context, DBHandler db) {
         this.mangaList = mangaList;
         this.context = context;
+        this.db = db;
     }
 
 
@@ -36,9 +38,28 @@ public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.ViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         final Manga manga = mangaList.get(position);
         holder.mangaTitle.setText(manga.getTitle());
+
+        //Add/remove manga from favourites
+        holder.fav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!db.isFavourite(manga.getTitle()))
+                {
+                    db.addToFavourites(manga);
+                    holder.fav.setImageResource(R.drawable.ic_favorite_black_24dp);
+                    Toast.makeText(view.getContext(), "Added to favourites",Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    db.deleteFromFavourites(manga);
+                    holder.fav.setImageResource(R.drawable.ic_favorite_black_24dp);
+                    Toast.makeText(view.getContext(), "Removed from favourites",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         Picasso.get().load(manga.getImage()).placeholder(R.drawable.noimage).into(holder.mangaImg);
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
@@ -63,7 +84,7 @@ public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.ViewHolder>{
 
     public class ViewHolder extends RecyclerView.ViewHolder
     {
-        public ImageView mangaImg;
+        public ImageView mangaImg,fav;
         public TextView mangaTitle;
         public LinearLayout linearLayout;
 
@@ -74,6 +95,7 @@ public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.ViewHolder>{
             mangaImg = itemView.findViewById(R.id.mangaImg);
             mangaTitle = itemView.findViewById(R.id.mangaTitle);
             linearLayout = itemView.findViewById(R.id.mangaLinear);
+            fav = itemView.findViewById(R.id.fav);
         }
 
     }

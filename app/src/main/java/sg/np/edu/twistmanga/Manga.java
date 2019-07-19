@@ -16,4 +16,11 @@ public class Manga {
         this.image_url = image_url;
         this.category = category;
     }
+    public void setMangaTitle(String MangaTitle){
+        mangaTitle = MangaTitle;
+    }
+
+    public void setImage_url(String Image_url){
+        image_url = Image_url;
+    }
 }
