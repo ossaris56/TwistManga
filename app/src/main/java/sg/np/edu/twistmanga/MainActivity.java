@@ -31,6 +31,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -120,6 +122,15 @@ public class MainActivity extends AppCompatActivity {
                        Manga manga = new Manga(jo.getString("t"), ("https://cdn.mangaeden.com/mangasimg/" + jo.getString("im")), jo.getString("c"));
                        mangaList.add(manga);
                    }
+
+                   //Sort in alphabetical order
+                   Collections.sort(mangaList, new Comparator<Manga>() {
+                       @Override
+                       public int compare(Manga m1, Manga m2) {
+                           return m1.getTitle().compareTo(m2.getTitle());
+                       }
+                   });
+
                    mangaAdapter = new MangaAdapter(mangaList, getApplicationContext());
                    recyclerView.setAdapter(mangaAdapter);
                }
