@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                    for (int i=0; i < array.length(); i++) {
                        JSONObject jo = array.getJSONObject(i);
 
-                       Manga manga = new Manga(jo.getString("t"), ("https://cdn.mangaeden.com/mangasimg/" + jo.getString("im")));
+                       Manga manga = new Manga(jo.getString("t"), ("https://cdn.mangaeden.com/mangasimg/" + jo.getString("im")), jo.getString("c"));
                        mangaList.add(manga);
                    }
                    mangaAdapter = new MangaAdapter(mangaList, getApplicationContext());
