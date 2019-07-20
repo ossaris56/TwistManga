@@ -81,6 +81,20 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(),Favourites.class);
                     startActivity(intent);
                 }
+
+                //Sorts mangaList according to name, but adds another mangaList when clicked on a 2nd time
+                if(id == R.id.sortasecend)
+                {
+                    loadUrlJson();
+
+                    //Sort according to name
+                    Collections.sort(mangaList, new Comparator<Manga>() {
+                        @Override
+                        public int compare(Manga m1, Manga m2) {
+                            return m1.getTitle().compareTo(m2.getTitle());
+                        }
+                    });
+                }
                 return true;
             }
         });
@@ -132,14 +146,6 @@ public class MainActivity extends AppCompatActivity {
                        Manga manga = new Manga(jo.getString("t"), ("https://cdn.mangaeden.com/mangasimg/" + jo.getString("im")), jo.getString("c"));
                        mangaList.add(manga);
                    }
-
-                   //Sort in alphabetical order
-                   Collections.sort(mangaList, new Comparator<Manga>() {
-                       @Override
-                       public int compare(Manga m1, Manga m2) {
-                           return m1.getTitle().compareTo(m2.getTitle());
-                       }
-                   });
 
                    mangaAdapter = new MangaAdapter(mangaList, getApplicationContext(),db);
                    recyclerView.setAdapter(mangaAdapter);

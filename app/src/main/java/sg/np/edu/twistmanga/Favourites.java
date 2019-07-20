@@ -133,7 +133,7 @@ public class Favourites extends AppCompatActivity {
                         }
                     }
 
-                    //Sort in alphabetical order
+                    //Sort according to name
                     Collections.sort(mangaList, new Comparator<Manga>() {
                         @Override
                         public int compare(Manga m1, Manga m2) {

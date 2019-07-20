@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/home"
         android:title="Home"
@@ -8,4 +9,7 @@
         android:id="@+id/fav"
         android:title="Favourite"
         android:icon="@drawable/ic_favorite_red_24dp"/>
+    <item
+        android:id="@+id/sortasecend"
+        android:title="Sort by Name" />
 </menu>
