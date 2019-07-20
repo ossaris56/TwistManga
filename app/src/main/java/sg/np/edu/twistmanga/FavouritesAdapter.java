@@ -3,7 +3,6 @@ package sg.np.edu.twistmanga;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,20 +11,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.ViewHolder>{
+public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.ViewHolder>{
 
     private List<Manga> mangaList;
     private Context context;
     private DBHandler db;
 
-    public MangaAdapter(List<Manga> mangaList, Context context, DBHandler db) {
+    public FavouritesAdapter(List<Manga> mangaList, Context context, DBHandler db) {
         this.mangaList = mangaList;
         this.context = context;
         this.db = db;
@@ -57,6 +55,10 @@ public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.ViewHolder>{
                 {
                     db.deleteFromFavourites(manga);
                     holder.fav.setImageResource(R.drawable.ic_favorite_black_24dp);
+                    mangaList.remove(position);
+                    notifyItemRemoved(position);
+                    notifyItemRangeChanged(position, getItemCount());
+                    notifyDataSetChanged();
                     Toast.makeText(view.getContext(), "Removed from favourites",Toast.LENGTH_SHORT).show();
                 }
             }

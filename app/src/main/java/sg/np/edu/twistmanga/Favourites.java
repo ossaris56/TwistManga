@@ -35,7 +35,7 @@ import java.util.List;
 public class Favourites extends AppCompatActivity {
 
     RecyclerView recyclerView;
-    MangaAdapter mangaAdapter;
+    FavouritesAdapter favouritesAdapter;
     List<Manga> mangaList;
     RecyclerViewAdapter adapter;
     private static final String URL_DATA = "https://www.mangaeden.com/api/list/0/?p=1";
@@ -141,8 +141,8 @@ public class Favourites extends AppCompatActivity {
                         }
                     });
 
-                    mangaAdapter = new MangaAdapter(mangaList, getApplicationContext(),db);
-                    recyclerView.setAdapter(mangaAdapter);
+                    favouritesAdapter = new FavouritesAdapter(mangaList, getApplicationContext(),db);
+                    recyclerView.setAdapter(favouritesAdapter);
                 }
                 catch (JSONException e) {
                     e.printStackTrace();
