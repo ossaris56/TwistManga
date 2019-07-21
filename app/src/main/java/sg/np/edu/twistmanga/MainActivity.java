@@ -82,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(),Favourites.class);
                     startActivity(intent);
                 }
-                loadUrlJson();
                 //Sorts mangaList according to name, but adds another mangaList when clicked on a 2nd time
                 if(id == R.id.sortasecend)
                 {
@@ -96,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
                     });
                     DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
                     drawerLayout.closeDrawer(Gravity.LEFT);
+                    mangaAdapter.notifyDataSetChanged();
                 }
                 return true;
             }

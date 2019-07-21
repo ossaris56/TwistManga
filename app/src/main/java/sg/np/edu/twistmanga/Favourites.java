@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -37,7 +38,6 @@ public class Favourites extends AppCompatActivity {
     RecyclerView recyclerView;
     FavouritesAdapter favouritesAdapter;
     List<Manga> mangaList;
-    RecyclerViewAdapter adapter;
     private static final String URL_DATA = "https://www.mangaeden.com/api/list/0";
     private DrawerLayout dl;
     private ActionBarDrawerToggle abdt;
@@ -80,6 +80,22 @@ public class Favourites extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(),Favourites.class);
                     startActivity(intent);
                 }
+
+                //Sorts mangaList according to name, but adds another mangaList when clicked on a 2nd time
+                if(id == R.id.sortasecend)
+                {
+                    //Sort according to name
+                    Collections.sort(mangaList, new Comparator<Manga>() {
+                        @Override
+                        public int compare(Manga m1, Manga m2) {
+
+                            return m1.getTitle().compareTo(m2.getTitle());
+                        }
+                    });
+                    DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+                    drawerLayout.closeDrawer(Gravity.LEFT);
+                    favouritesAdapter.notifyDataSetChanged();
+                }
                 return true;
             }
         });
@@ -91,18 +107,6 @@ public class Favourites extends AppCompatActivity {
         recyclerView.addItemDecoration(new SpacesItemDecoration(1));
         mangaList = new ArrayList<>();
         showFavourites();
-        adapter = new RecyclerViewAdapter();
-        recyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener(new RecyclerViewItemClickListener() {
-            @Override
-            public void onItemClick(View v, int position) {
-                //View view, int position
-                Intent intent = new Intent(v.getContext(),Manga_details.class);
-                startActivity(intent);
-                Toast tt = Toast.makeText(v.getContext(), "This is working",Toast.LENGTH_LONG);
-                tt.show();
-            }
-        });
     }
 
     //Navbar needs this. Don't touch it jabier.
@@ -132,14 +136,6 @@ public class Favourites extends AppCompatActivity {
                             mangaList.add(manga);
                         }
                     }
-
-                    //Sort according to name
-                    Collections.sort(mangaList, new Comparator<Manga>() {
-                        @Override
-                        public int compare(Manga m1, Manga m2) {
-                            return m1.getTitle().compareTo(m2.getTitle());
-                        }
-                    });
 
                     favouritesAdapter = new FavouritesAdapter(mangaList, getApplicationContext(),db);
                     recyclerView.setAdapter(favouritesAdapter);
