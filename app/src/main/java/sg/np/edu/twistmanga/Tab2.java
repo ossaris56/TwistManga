@@ -61,6 +61,7 @@ public class Tab2 extends Fragment {
     View view;
     RecyclerView rv;
     ArrayList<ChapterInfo> chapterInfos;
+    ArrayList<String> chapterIdList;
     ChapterAdapter adapter;
     private OnFragmentInteractionListener mListener;
 
@@ -181,10 +182,12 @@ public class Tab2 extends Fragment {
                     }
                     rv = view.findViewById(R.id.chaptersrv);
                     ArrayList<String> chapternumber = new ArrayList<String>();
+                    chapterIdList = new ArrayList<String>();
                     for(int i = 0; i<chapterInfos.size();i++){
                         chapternumber.add(""+chapterInfos.get(i).getChapterNumber());
+                        chapterIdList.add("" + chapterInfos.get(i).getId());
                     }
-                    adapter = new ChapterAdapter(chapternumber, getContext());
+                    adapter = new ChapterAdapter(chapternumber, chapterIdList, getContext());
                     LinearLayoutManager layout = new LinearLayoutManager(getActivity().getApplicationContext());
                     DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rv.getContext(),
                             layout.getOrientation());

@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     MangaAdapter mangaAdapter;
     List<Manga> mangaList;
     RecyclerViewAdapter adapter;
-    private static final String URL_DATA = "https://www.mangaeden.com/api/list/0";
+    private static final String URL_DATA = "https://www.mangaeden.com/api/list/0/?l=200";
     private DrawerLayout dl;
     private ActionBarDrawerToggle abdt;
     DBHandler db = new DBHandler(this,null,null,1);
@@ -107,18 +107,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new SpacesItemDecoration(1));
         mangaList = new ArrayList<>();
         loadUrlJson();
-//        adapter = new RecyclerViewAdapter();
-//        recyclerView.setAdapter(adapter);
-//        adapter.setOnItemClickListener(new RecyclerViewItemClickListener() {
-//            @Override
-//            public void onItemClick(View v, int position) {
-//                //View view, int position
-//                Intent intent = new Intent(MainActivity.this,Manga_details.class);
-//                startActivity(intent);
-//                Toast tt = Toast.makeText(MainActivity.this, "This is working",Toast.LENGTH_LONG);
-//                tt.show();
-//            }
-//        });
     }
 
     //Navbar needs this. Don't touch it jabier.

@@ -19,13 +19,14 @@ import java.util.List;
 public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHolder>{
 
     private List<String> chapterlist;
+    private List<String> chapterIdList;
     private Context c;
     public TextView txt;
 
-    public ChapterAdapter(ArrayList<String> chapterlist, Context context) {
+    public ChapterAdapter(ArrayList<String> chapterlist, ArrayList<String> chapterIdList, Context context) {
         this.c = context;
         this.chapterlist = chapterlist;
-
+        this.chapterIdList = chapterIdList;
     }
 
 
@@ -42,7 +43,10 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent readMangaIntent = new Intent(c, ReadManga.class);
+                String chapterId = chapterIdList.get(position);
+                readMangaIntent.putExtra("chapId", chapterId);
+                c.startActivity(readMangaIntent);
 
             }
         });
