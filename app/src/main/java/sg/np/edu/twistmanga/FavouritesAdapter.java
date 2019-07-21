@@ -70,6 +70,8 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Vi
             public void onClick(View view) {
                 Intent mangaDetailsIntent = new Intent(context, Manga_details.class);
                 mangaDetailsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                Manga manga1 = mangaList.get(position);
+                mangaDetailsIntent.putExtra("Manga", manga1);
                 context.startActivity(mangaDetailsIntent);
 
             }

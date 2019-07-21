@@ -38,7 +38,7 @@ public class Favourites extends AppCompatActivity {
     FavouritesAdapter favouritesAdapter;
     List<Manga> mangaList;
     RecyclerViewAdapter adapter;
-    private static final String URL_DATA = "https://www.mangaeden.com/api/list/0/?p=1";
+    private static final String URL_DATA = "https://www.mangaeden.com/api/list/0";
     private DrawerLayout dl;
     private ActionBarDrawerToggle abdt;
     DBHandler db = new DBHandler(this,null,null,1);
