@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 int id = menuItem.getItemId();
+                loadUrlJson();
 
                 //Brings user to Main page
                 if(id == R.id.home)
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(),Favourites.class);
                     startActivity(intent);
                 }
-                loadUrlJson();
+
                 //Sorts mangaList according to name, but adds another mangaList when clicked on a 2nd time
                 if(id == R.id.sortasecend)
                 {
@@ -94,6 +95,8 @@ public class MainActivity extends AppCompatActivity {
                             return m1.getTitle().compareTo(m2.getTitle());
                         }
                     });
+
+                    //Slides back when button is clicked
                     DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
                     drawerLayout.closeDrawer(Gravity.LEFT);
                 }
