@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(),Favourites.class);
                     startActivity(intent);
                 }
-
+                loadUrlJson();
                 //Sorts mangaList according to name, but adds another mangaList when clicked on a 2nd time
                 if(id == R.id.sortasecend)
                 {
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-                    loadUrlJson();
+                    //loadUrlJson();
                 }
                 return true;
             }
@@ -107,18 +107,18 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new SpacesItemDecoration(1));
         mangaList = new ArrayList<>();
         loadUrlJson();
-        adapter = new RecyclerViewAdapter();
-        recyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener(new RecyclerViewItemClickListener() {
-            @Override
-            public void onItemClick(View v, int position) {
-                //View view, int position
-                Intent intent = new Intent(MainActivity.this,Manga_details.class);
-                startActivity(intent);
-                Toast tt = Toast.makeText(MainActivity.this, "This is working",Toast.LENGTH_LONG);
-                tt.show();
-            }
-        });
+//        adapter = new RecyclerViewAdapter();
+//        recyclerView.setAdapter(adapter);
+//        adapter.setOnItemClickListener(new RecyclerViewItemClickListener() {
+//            @Override
+//            public void onItemClick(View v, int position) {
+//                //View view, int position
+//                Intent intent = new Intent(MainActivity.this,Manga_details.class);
+//                startActivity(intent);
+//                Toast tt = Toast.makeText(MainActivity.this, "This is working",Toast.LENGTH_LONG);
+//                tt.show();
+//            }
+//        });
     }
 
     //Navbar needs this. Don't touch it jabier.
