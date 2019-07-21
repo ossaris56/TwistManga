@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -93,8 +94,8 @@ public class MainActivity extends AppCompatActivity {
                             return m1.getTitle().compareTo(m2.getTitle());
                         }
                     });
-
-                    //loadUrlJson();
+                    DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+                    drawerLayout.closeDrawer(Gravity.LEFT);
                 }
                 return true;
             }
