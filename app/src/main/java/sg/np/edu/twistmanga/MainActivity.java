@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     MangaAdapter mangaAdapter;
     List<Manga> mangaList;
     RecyclerViewAdapter adapter;
-    private static final String URL_DATA = "https://www.mangaeden.com/api/list/0/?p=1";
+    private static final String URL_DATA = "https://www.mangaeden.com/api/list/0";
     private DrawerLayout dl;
     private ActionBarDrawerToggle abdt;
     DBHandler db = new DBHandler(this,null,null,1);
@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
                    for (int i=0; i < array.length(); i++) {
                        JSONObject jo = array.getJSONObject(i);
 
-                       Manga manga = new Manga(jo.getString("t"), ("https://cdn.mangaeden.com/mangasimg/" + jo.getString("im")), jo.getString("c"));
+                       Manga manga = new Manga(jo.getString("t"), ("https://cdn.mangaeden.com/mangasimg/" + jo.getString("im")), jo.getString("c"),jo.getString("s"),jo.getString("i"));
                        mangaList.add(manga);
                    }
 

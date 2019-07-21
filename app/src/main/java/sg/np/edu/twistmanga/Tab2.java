@@ -1,14 +1,43 @@
 package sg.np.edu.twistmanga;
 
+import android.animation.TypeConverter;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.JsonReader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpResponse;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 
 /**
@@ -22,17 +51,20 @@ import android.view.ViewGroup;
 public class Tab2 extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String URL_DATA = "https://www.mangaeden.com/api/manga/";
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    View view;
+    RecyclerView rv;
+    ArrayList<ChapterInfo> chapterInfos;
+    ChapterAdapter adapter;
     private OnFragmentInteractionListener mListener;
 
     public Tab2() {
-        // Required empty public constructor
     }
 
     /**
@@ -59,14 +91,18 @@ public class Tab2 extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
+        loadUrlJson();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tab2, container, false);
+        view = inflater.inflate(R.layout.fragment_tab2, container, false);
+        return view;
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -107,4 +143,69 @@ public class Tab2 extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+    private void loadUrlJson() {
+        final ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
+        Manga manga = getActivity().getIntent().getExtras().getParcelable("Manga");
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_DATA + manga.getId() , new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progressDialog.dismiss();
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray array = jsonObject.getJSONArray("chapters");
+                    chapterInfos = new ArrayList<ChapterInfo>();
+                    for (int i=0; i < array.length(); i++) {
+                            JSONArray innerchap = array.getJSONArray(i);
+                            List<String> list = new ArrayList<String>();
+                            for(int m =0;m< innerchap.length();m++){
+                            list.add(innerchap.get(m).toString());}
+                            double num = Double.parseDouble((list.get(0)));
+                            int number = (int)num;
+                            //int number = Integer.parseInt(list.get(0));
+                            ChapterInfo chapter = new ChapterInfo(number,list.get(1),list.get(2),list.get(3));
+                            chapterInfos.add(chapter);
+//                        for (int y = 0; y < array.length(); y++) {
+//                            JSONArray innerchap = array.getJSONArray(y);
+//                            List<String> list = new ArrayList<String>();
+//                            for(int m =0;m< innerchap.length();m++){
+//                            list.add(innerchap.get(m).toString());}
+//                            double num = Double.parseDouble((list.get(0)));
+//                            int number = (int)num;
+//                            //int number = Integer.parseInt(list.get(0));
+//                            ChapterInfo chapter = new ChapterInfo(number,list.get(1),list.get(2),list.get(3));
+//                            chapterInfos.add(chapter);
+//                        }
+                    }
+                    rv = view.findViewById(R.id.chaptersrv);
+                    ArrayList<String> chapternumber = new ArrayList<String>();
+                    for(int i = 0; i<chapterInfos.size();i++){
+                        chapternumber.add(""+chapterInfos.get(i).getChapterNumber());
+                    }
+                    adapter = new ChapterAdapter(chapternumber, getContext());
+                    LinearLayoutManager layout = new LinearLayoutManager(getActivity().getApplicationContext());
+                    DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rv.getContext(),
+                            layout.getOrientation());
+                    rv.addItemDecoration(dividerItemDecoration);
+
+                    rv.setLayoutManager(layout);
+                    rv.setAdapter(adapter);
+                }
+
+                catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error ) {
+                Toast.makeText(getActivity().getApplicationContext(), "Error" + error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
+        requestQueue.add(stringRequest);
+    }
+
 }

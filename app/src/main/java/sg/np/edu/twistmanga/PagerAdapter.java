@@ -1,18 +1,23 @@
 package sg.np.edu.twistmanga;
 
+import android.nfc.Tag;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.fragment.app.FragmentPagerAdapter;
 
-public class PagerAdapter extends FragmentStatePagerAdapter {
+public class PagerAdapter extends FragmentPagerAdapter {
 
-    int NoOfTabs;
-
-    public PagerAdapter(FragmentManager fm, int NumberOfTabs)
+    //int NoOfTabs;
+    public PagerAdapter(FragmentManager fm)
     {
-        super(fm);
-        this.NoOfTabs = NumberOfTabs;
+        super(fm,BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+
     }
+    //, int NumberOfTabs
+    //this.NoOfTabs = NumberOfTabs;
     @Override
     public Fragment getItem(int position) {
         switch (position) {
