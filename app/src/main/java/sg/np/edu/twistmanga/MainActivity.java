@@ -85,15 +85,16 @@ public class MainActivity extends AppCompatActivity {
                 //Sorts mangaList according to name, but adds another mangaList when clicked on a 2nd time
                 if(id == R.id.sortasecend)
                 {
-                    loadUrlJson();
-
                     //Sort according to name
                     Collections.sort(mangaList, new Comparator<Manga>() {
                         @Override
                         public int compare(Manga m1, Manga m2) {
+
                             return m1.getTitle().compareTo(m2.getTitle());
                         }
                     });
+
+                    loadUrlJson();
                 }
                 return true;
             }
