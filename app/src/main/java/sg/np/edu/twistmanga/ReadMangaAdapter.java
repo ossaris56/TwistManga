@@ -1,6 +1,7 @@
 package sg.np.edu.twistmanga;
 
 import android.content.Context;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,14 +29,15 @@ public class ReadMangaAdapter extends PagerAdapter {
         ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.manga_page, collection, false);
         ImageView mangaPage = layout.findViewById(R.id.mangaPage);
         String imageURL = "https://cdn.mangaeden.com/mangasimg/" + pages.get(Integer.toString(position));
-        Picasso.get().load(imageURL).placeholder(R.drawable.noimage).into(mangaPage);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        Picasso.get().load(imageURL).resize(collection.getMeasuredWidth(), 0).placeholder(R.drawable.noimage).into(mangaPage);
         //Media.setImageFromUrl(mangaPage, imageUrl);//call to GlideApp or Picasso to load the image into the ImageView
         collection.addView(layout);
         return layout;
     }
 
     @Override
-    public void destroyItem( ViewGroup container, int position, @NonNull Object view) {
+    public void destroyItem( ViewGroup container, int position, Object view) {
         container.removeView((View) view);
     }
 
@@ -45,7 +47,7 @@ public class ReadMangaAdapter extends PagerAdapter {
     }
 
     @Override
-    public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
+    public boolean isViewFromObject( View view,  Object object) {
         return view == object;
 }
 }
