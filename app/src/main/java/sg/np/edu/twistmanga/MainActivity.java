@@ -8,15 +8,20 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -41,15 +46,12 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     MangaAdapter mangaAdapter;
     List<Manga> mangaList;
-    RecyclerViewAdapter adapter;
+
     private static final String URL_DATA = "https://www.mangaeden.com/api/list/0/?l=200";
     private DrawerLayout dl;
     private ActionBarDrawerToggle abdt;
     DBHandler db = new DBHandler(this,null,null,1);
-    Button sortBtn;
-    AlertDialog sortAlert;
-    CharSequence[] sortList = {" Name Ascending "," Name Descending "," Popularity Rank "};
-    Button filterBtn;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,14 +60,9 @@ public class MainActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
-        //sort by button
-        sortBtn = (Button)findViewById(R.id.sortBtn);
-        sortBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sortAlertDialog();
-            }
-        });
+        ListView mListView = (ListView) findViewById(R.id.list);
+        TextView mEmptyView = (TextView) findViewById(R.id.emptyView);
+        handleIntent(getIntent());
 
         //Adds navbar
         dl = (DrawerLayout)findViewById(R.id.drawer_layout);
@@ -100,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 //Sorts mangaList according to name, but adds another mangaList when clicked on a 2nd time
                 if(id == R.id.sortasecend)
                 {
-                    //Sort according to name ascending
+                    //Sort according to name
                     Collections.sort(mangaList, new Comparator<Manga>() {
                         @Override
                         public int compare(Manga m1, Manga m2) {
@@ -115,8 +112,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
-
 
         recyclerView = findViewById(R.id.mangaRV);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 3);
@@ -171,39 +166,33 @@ public class MainActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
-    public void sortAlertDialog(){
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.toolbar_menu, menu);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setTitle("Sort By...?");
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
 
-        builder.setSingleChoiceItems(sortList, -1, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int item) {
+        return true;
+    }
 
-                switch(item)
-                {
-                    case 0:
-                        //Sort according to name ascending
-                        Collections.sort(mangaList, new Comparator<Manga>() {
-                            @Override
-                            public int compare(Manga m1, Manga m2) {
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleIntent(intent);
+    }
 
-                                return m1.getTitle().compareTo(m2.getTitle());
-                            }
-                        });
-                        mangaAdapter.notifyDataSetChanged();
+    private void handleIntent(Intent intent) {
 
-                    case 1:
-                        //Sort according to name descending
-                        Collections.sort(mangaList, Collections.reverseOrder());
-
-                        mangaAdapter.notifyDataSetChanged();
-
-                    case 2:
-                }
-                sortAlert.dismiss();
-            }
-        });
-
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            //use the query to search your data somehow
+        }
     }
 }

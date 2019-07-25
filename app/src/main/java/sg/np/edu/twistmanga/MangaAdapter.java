@@ -42,6 +42,10 @@ public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.ViewHolder>{
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final Manga manga = mangaList.get(position);
         holder.mangaTitle.setText(manga.getTitle());
+        if(db.isFavourite(manga.getTitle()))
+        {
+            holder.star.setImageResource(R.drawable.ic_star_24dp);
+        }
 
         //Add/remove manga from favourites
         holder.fav.setOnClickListener(new View.OnClickListener() {
@@ -50,13 +54,13 @@ public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.ViewHolder>{
                 if(!db.isFavourite(manga.getTitle()))
                 {
                     db.addToFavourites(manga);
-                    holder.fav.setImageResource(R.drawable.ic_favorite_red_24dp);
+                    holder.star.setImageResource(R.drawable.ic_star_24dp);
                     Toast.makeText(view.getContext(), "Added to favourites",Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
                     db.deleteFromFavourites(manga);
-                    holder.fav.setImageResource(R.drawable.ic_favorite_black_24dp);
+                    holder.star.setImageResource(R.drawable.ic_star_invis_24dp);
                     Toast.makeText(view.getContext(), "Removed from favourites",Toast.LENGTH_SHORT).show();
                 }
             }
@@ -87,7 +91,7 @@ public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.ViewHolder>{
 
     public class ViewHolder extends RecyclerView.ViewHolder
     {
-        public ImageView mangaImg,fav;
+        public ImageView mangaImg,fav,star;
         public TextView mangaTitle;
         public LinearLayout linearLayout;
 
@@ -99,6 +103,7 @@ public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.ViewHolder>{
             mangaTitle = itemView.findViewById(R.id.mangaTitle);
             linearLayout = itemView.findViewById(R.id.mangaLinear);
             fav = itemView.findViewById(R.id.fav);
+            star = itemView.findViewById(R.id.star);
         }
 
     }
