@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     DBHandler db = new DBHandler(this,null,null,1);
     Button sortBtn;
     AlertDialog sortAlert;
-    CharSequence[] sortList = {" Name Ascending "," Name Descending "};
+    CharSequence[] sortList = {" Name Ascending "," Name Descending "," Popularity Rank "};
     Button filterBtn;
 
     @Override
@@ -192,24 +192,18 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
                         mangaAdapter.notifyDataSetChanged();
-                        break;
 
                     case 1:
                         //Sort according to name descending
-                        Collections.sort(mangaList, new Comparator<Manga>() {
-                            @Override
-                            public int compare(Manga m1, Manga m2) {
+                        Collections.sort(mangaList, Collections.reverseOrder());
 
-                                return m2.getTitle().compareToIgnoreCase(m1.getTitle());
-                            }
-                        });
                         mangaAdapter.notifyDataSetChanged();
-                        break;
+
+                    case 2:
                 }
                 sortAlert.dismiss();
             }
         });
-        sortAlert = builder.create();
-        sortAlert.show();
+
     }
 }

@@ -17,10 +17,5 @@
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
-    
-    <string-array name="sort_options">
-        <item>Name Ascending</item>
-        <item>Name Descending</item>
-        <item>Popularity Rank</item>
-    </string-array>
+
 </resources>
