@@ -23,6 +23,18 @@
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
+        <Button
+            android:id="@+id/sortBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sort By:" />
+
+        <Button
+            android:id="@+id/filterBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Filter By:" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/mangaRV"
             android:layout_width="match_parent"
@@ -31,6 +43,7 @@
     </LinearLayout>
 
     <!-- Container for contents of drawer - use NavigationView to make configuration easier -->
+
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
@@ -38,6 +51,8 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/navigation_header"
-        app:menu="@menu/navigation_menu"/>
+        app:menu="@menu/navigation_menu">
+
+    </com.google.android.material.navigation.NavigationView>
 
 </androidx.drawerlayout.widget.DrawerLayout>

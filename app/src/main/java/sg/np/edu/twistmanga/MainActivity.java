@@ -8,12 +8,15 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -43,7 +46,10 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout dl;
     private ActionBarDrawerToggle abdt;
     DBHandler db = new DBHandler(this,null,null,1);
-
+    Button sortBtn;
+    AlertDialog sortAlert;
+    CharSequence[] sortList = {" Name Ascending "," Name Descending "};
+    Button filterBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +57,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+
+        //sort by button
+        sortBtn = (Button)findViewById(R.id.sortBtn);
+        sortBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sortAlertDialog();
+            }
+        });
 
         //Adds navbar
         dl = (DrawerLayout)findViewById(R.id.drawer_layout);
@@ -85,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                 //Sorts mangaList according to name, but adds another mangaList when clicked on a 2nd time
                 if(id == R.id.sortasecend)
                 {
-                    //Sort according to name
+                    //Sort according to name ascending
                     Collections.sort(mangaList, new Comparator<Manga>() {
                         @Override
                         public int compare(Manga m1, Manga m2) {
@@ -100,6 +115,8 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+
 
         recyclerView = findViewById(R.id.mangaRV);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 3);
@@ -152,5 +169,47 @@ public class MainActivity extends AppCompatActivity {
         });
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+    }
+
+    public void sortAlertDialog(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle("Sort By...?");
+
+        builder.setSingleChoiceItems(sortList, -1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int item) {
+
+                switch(item)
+                {
+                    case 0:
+                        //Sort according to name ascending
+                        Collections.sort(mangaList, new Comparator<Manga>() {
+                            @Override
+                            public int compare(Manga m1, Manga m2) {
+
+                                return m1.getTitle().compareTo(m2.getTitle());
+                            }
+                        });
+                        mangaAdapter.notifyDataSetChanged();
+                        break;
+
+                    case 1:
+                        //Sort according to name descending
+                        Collections.sort(mangaList, new Comparator<Manga>() {
+                            @Override
+                            public int compare(Manga m1, Manga m2) {
+
+                                return m2.getTitle().compareToIgnoreCase(m1.getTitle());
+                            }
+                        });
+                        mangaAdapter.notifyDataSetChanged();
+                        break;
+                }
+                sortAlert.dismiss();
+            }
+        });
+        sortAlert = builder.create();
+        sortAlert.show();
     }
 }

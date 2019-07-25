@@ -10,7 +10,7 @@ public class Manga implements Parcelable {
     private String image_url;
     private String category;
     private String status;
-    private  String id;
+    private String id;
 
     @Override
     public boolean equals(Object obj) {
