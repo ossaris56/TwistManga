@@ -21,7 +21,7 @@ public class Manga implements Parcelable {
         mangaTitle = in.readString();
         image_url = in.readString();
         category = in.readString();
-        status=in.readString();
+        status = in.readString();
         id = in.readString();
     }
 

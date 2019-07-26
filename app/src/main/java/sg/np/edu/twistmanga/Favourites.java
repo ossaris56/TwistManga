@@ -13,7 +13,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -81,17 +80,21 @@ public class Favourites extends AppCompatActivity {
                     startActivity(intent);
                 }
 
-                //Sorts mangaList according to name, but adds another mangaList when clicked on a 2nd time
-                if(id == R.id.sortasecend)
+                //Retrieve manga with ongoing status
+                if(id == R.id.ongoingmanga)
                 {
-                    //Sort according to name
-                    Collections.sort(mangaList, new Comparator<Manga>() {
-                        @Override
-                        public int compare(Manga m1, Manga m2) {
+                    //display manga with ongoing status
 
-                            return m1.getTitle().compareTo(m2.getTitle());
-                        }
-                    });
+                    DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+                    drawerLayout.closeDrawer(Gravity.LEFT);
+                    favouritesAdapter.notifyDataSetChanged();
+                }
+
+                //Retrieve manga with completed status
+                if(id == R.id.completedmanga)
+                {
+                    //display manga with completed status
+
                     DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
                     drawerLayout.closeDrawer(Gravity.LEFT);
                     favouritesAdapter.notifyDataSetChanged();

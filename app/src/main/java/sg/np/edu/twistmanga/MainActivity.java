@@ -8,9 +8,11 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -19,6 +21,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -51,7 +54,12 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout dl;
     private ActionBarDrawerToggle abdt;
     DBHandler db = new DBHandler(this,null,null,1);
-
+    ArrayList ongoingList;
+    List<Manga> completedList;
+    Button sortBtn;
+    AlertDialog sortAlert;
+    CharSequence[] sortList = {" Name Ascending "," Name Descending "};
+    Button filterBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,19 +102,52 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(),Favourites.class);
                     startActivity(intent);
                 }
-                //Sorts mangaList according to name, but adds another mangaList when clicked on a 2nd time
-                if(id == R.id.sortasecend)
-                {
-                    //Sort according to name
-                    Collections.sort(mangaList, new Comparator<Manga>() {
-                        @Override
-                        public int compare(Manga m1, Manga m2) {
 
-                            return m1.getTitle().compareTo(m2.getTitle());
+                //Retrieve manga with ongoing status
+                if(id == R.id.ongoingmanga)
+                {
+                    //display manga with ongoing status
+                    ongoingList = new ArrayList<Manga>();
+                    for(Manga m: mangaList){
+
+                        if(Integer.parseInt(m.getStatus()) == 1){
+
+                            ongoingList.add(m);
+
                         }
-                    });
+
+                    }
+
+                    mangaAdapter = new MangaAdapter(ongoingList, getApplicationContext(),db);
+                    recyclerView.setAdapter(mangaAdapter);
+
                     DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
                     drawerLayout.closeDrawer(Gravity.LEFT);
+
+                    mangaAdapter.notifyDataSetChanged();
+                }
+
+                //Retrieve manga with completed status
+                if(id == R.id.completedmanga)
+                {
+                    //display manga with completed status
+                    completedList = new ArrayList<Manga>();
+                    for(Manga m: mangaList){
+
+                        if(Integer.parseInt(m.getStatus()) == 2){
+
+                            completedList.add(m);
+
+                        }
+
+                    }
+
+                    mangaAdapter = new MangaAdapter(completedList, getApplicationContext(),db);
+                    recyclerView.setAdapter(mangaAdapter);
+
+                    DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+                    drawerLayout.closeDrawer(Gravity.LEFT);
+
                     mangaAdapter.notifyDataSetChanged();
                 }
                 return true;
@@ -120,6 +161,29 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new SpacesItemDecoration(1));
         mangaList = new ArrayList<>();
         loadUrlJson();
+
+        //sort by button
+        sortBtn = (Button)findViewById(R.id.sortBtn);
+        sortBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                sortAlertDialog();
+
+            }
+        });
+
+        //filter by button
+        filterBtn = (Button)findViewById(R.id.filterBtn);
+        filterBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //filterAlertDialog
+
+            }
+        });
+
     }
 
     //Navbar needs this. Don't touch it jabier.
@@ -194,5 +258,47 @@ public class MainActivity extends AppCompatActivity {
             String query = intent.getStringExtra(SearchManager.QUERY);
             //use the query to search your data somehow
         }
+    }
+
+    public void sortAlertDialog(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle("Sort By...?");
+
+        builder.setSingleChoiceItems(sortList, -1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int item) {
+
+                switch(item)
+                {
+                    case 0:
+                        //Sort according to name ascending
+                        Collections.sort(mangaList, new Comparator<Manga>() {
+                            @Override
+                            public int compare(Manga m1, Manga m2) {
+
+                                return m1.getTitle().compareTo(m2.getTitle());
+                            }
+                        });
+                        mangaAdapter.notifyDataSetChanged();
+                        break;
+
+                    case 1:
+                        //Sort according to name descending
+                        Collections.sort(mangaList, new Comparator<Manga>() {
+                            @Override
+                            public int compare(Manga m1, Manga m2) {
+
+                                return m2.getTitle().compareToIgnoreCase(m1.getTitle());
+                            }
+                        });
+                        mangaAdapter.notifyDataSetChanged();
+                        break;
+                }
+                sortAlert.dismiss();
+            }
+        });
+        sortAlert = builder.create();
+        sortAlert.show();
     }
 }
