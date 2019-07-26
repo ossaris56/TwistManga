@@ -59,7 +59,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         if (cursor.getCount() <= 0)
         {
-            cursor.close();
+            cursor.close(); 
             return false;
         }
         cursor.close();
