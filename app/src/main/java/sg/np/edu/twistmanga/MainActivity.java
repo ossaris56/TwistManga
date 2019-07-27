@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     DBHandler db = new DBHandler(this,null,null,1);
     ArrayList ongoingList;
     List<Manga> completedList;
+    TextView numManga;
     Button sortBtn;
     AlertDialog sortAlert;
     CharSequence[] sortList = {" Name Ascending "," Name Descending "};
@@ -165,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new SpacesItemDecoration(1));
         mangaList = new ArrayList<>();
+        numManga = (TextView)findViewById(R.id.numManga);
         loadUrlJson();
 
         //sort by button
@@ -211,12 +213,19 @@ public class MainActivity extends AppCompatActivity {
 
                    JSONArray array = jsonObject.getJSONArray("manga");
 
+                   //manga counter
+                   int mCount = 0;
+
                    for (int i=0; i < array.length(); i++) {
                        JSONObject jo = array.getJSONObject(i);
 
                        Manga manga = new Manga(jo.getString("t"), ("https://cdn.mangaeden.com/mangasimg/" + jo.getString("im")), jo.getString("c"),jo.getString("s"),jo.getString("i"));
                        mangaList.add(manga);
+                       mCount += 1;
                    }
+
+                   //shows number of manga in app
+                   numManga.setText(mCount + " Manga");
 
                    mangaAdapter = new MangaAdapter(mangaList, getApplicationContext(),db);
                    recyclerView.setAdapter(mangaAdapter);
