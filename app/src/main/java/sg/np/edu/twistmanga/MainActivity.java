@@ -40,6 +40,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -55,12 +56,52 @@ public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle abdt;
     DBHandler db = new DBHandler(this,null,null,1);
     ArrayList ongoingList;
-    List<Manga> completedList;
+    ArrayList completedList;
     TextView numManga;
     Button sortBtn;
     AlertDialog sortAlert;
     CharSequence[] sortList = {" Name Ascending "," Name Descending "};
     Button filterBtn;
+    AlertDialog.Builder filterAlert;
+    String[] filterList = {
+            "Action",
+            "Adult",
+            "Adventure",
+            "Comedy",
+            "Drama",
+            "Ecchi",
+            "Fantasy",
+            "Gender Bender",
+            "Harem",
+            "Historical",
+            "Horror",
+            "Josei",
+            "Martial Arts",
+            "Mature",
+            "Mystery",
+            "Psychological",
+            "Romance",
+            "School Life",
+            "Sci-fi",
+            "Seinen",
+            "Shoujo",
+            "Shounen",
+            "Slice of Life",
+            "Smut",
+            "Sports",
+            "Supernatural",
+            "Tragedy",
+            "Yaoi",
+            "Yuri"
+    };
+    List<String> itemsIntoList;
+    boolean[] mangaSelected = new boolean[]{
+            false,
+            false,
+            false,
+            false,
+            false
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                //filterAlertDialog
+                filterAlertDialog();
 
             }
         });
@@ -274,6 +315,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //sorting options method
     public void sortAlertDialog(){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -314,5 +356,48 @@ public class MainActivity extends AppCompatActivity {
         });
         sortAlert = builder.create();
         sortAlert.show();
+    }
+
+    //filtering options method
+    public void filterAlertDialog(){
+        filterAlert = new AlertDialog.Builder(MainActivity.this);
+
+        itemsIntoList = Arrays.asList(filterList);
+
+        filterAlert.setMultiChoiceItems(filterList, mangaSelected, new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) { }
+        });
+
+        filterAlert.setCancelable(false);
+        filterAlert.setTitle("Filter By...?");
+
+        filterAlert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                int a = 0;
+                while(a < mangaSelected.length)
+                {
+                    boolean value = mangaSelected[a];
+
+                    if (value){
+
+                        numManga.setText(itemsIntoList.get(a));
+
+                    }
+                    a++;
+                }
+            }
+        });
+
+        filterAlert.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+
+            }
+        });
+
+        AlertDialog filterDialog = filterAlert.create();
+        filterDialog.show();
     }
 }
