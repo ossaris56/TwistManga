@@ -2,9 +2,17 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/home"
+        android:id="@+id/homes"
+        android:icon="@drawable/ic_home_black_24dp"
         android:title="Home"
-        android:icon="@drawable/ic_home_black_24dp"/>
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/home"
+                android:title="&#160;&#160;&#160;&#160;&#160;&#160;MangaEden">
+            </item>
+        </menu>
+    </item>
     <item
         android:id="@+id/fav"
         android:title="Favourite"
@@ -15,4 +23,8 @@
     <item
         android:id="@+id/completedmanga"
         android:title="Completed Manga" />
+    <item
+        android:id="@+id/settings"
+        android:title="Settings"
+        android:icon="@drawable/ic_settings_black_24dp" />
 </menu>

@@ -99,6 +99,11 @@ public class Favourites extends AppCompatActivity {
                     drawerLayout.closeDrawer(Gravity.LEFT);
                     favouritesAdapter.notifyDataSetChanged();
                 }
+                if(id == R.id.settings)
+                {
+                    Intent intent = new Intent(getApplicationContext(),settings.class);
+                    startActivity(intent);
+                }
                 return true;
             }
         });

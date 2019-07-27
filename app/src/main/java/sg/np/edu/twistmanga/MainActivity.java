@@ -150,6 +150,11 @@ public class MainActivity extends AppCompatActivity {
 
                     mangaAdapter.notifyDataSetChanged();
                 }
+                if(id == R.id.settings)
+                {
+                    Intent intent = new Intent(getApplicationContext(),settings.class);
+                    startActivity(intent);
+                }
                 return true;
             }
         });
