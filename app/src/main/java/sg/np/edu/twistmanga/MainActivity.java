@@ -15,6 +15,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -293,9 +294,15 @@ public class MainActivity extends AppCompatActivity {
                    int mCount = 0;
 
                    for (int i=0; i < array.length(); i++) {
+                       ArrayList<String> categories = new ArrayList<>();
                        JSONObject jo = array.getJSONObject(i);
+                       if (jo.getJSONArray("c") != null) {
+                           for (int in=0; in< jo.getJSONArray("c").length(); in++) {
+                               categories.add(jo.getJSONArray("c").getString(in));
+                           }
+                       }
 
-                       Manga manga = new Manga(jo.getString("t"), ("https://cdn.mangaeden.com/mangasimg/" + jo.getString("im")), jo.getString("c"),jo.getString("s"),jo.getString("i"));
+                       Manga manga = new Manga(jo.getString("t"), ("https://cdn.mangaeden.com/mangasimg/" + jo.getString("im")), categories,jo.getString("s"),jo.getString("i"));
                        mangaList.add(manga);
                        mCount += 1;
                    }
@@ -430,21 +437,16 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 //manga filtering process
-                while(a < mangaList.size())
-                {
-                    for(int i = 0; i < selectedGenre.size(); i++){
+                for(int i = 0; i < mangaList.size(); i++){
+                    Log.d("selected Genre : ", selectedGenre.toString());
+                    Log.d("manga categories : ", mangaList.get(i).getCategory().toString());
 
-                        String genre = selectedGenre.get(i);
-                        String mangacat = mangaList.get(a).getCategory();
-
-                        if(mangacat.contains(genre)){
-
-                            //mangaList.remove(mangaList.get(a));
-                            filterResult.add(mangaList.get(a));
-                            mCount += 1;
-
-                        }
+                    if (!Collections.disjoint(selectedGenre, mangaList.get(i).getCategory())) {
+                        filterResult.add(mangaList.get(i));
+                        mCount++;
                     }
+                    Log.d("filter results : ", filterResult.toString());
+
                 }
 
                 //shows number of manga in app

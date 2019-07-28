@@ -35,6 +35,7 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -110,7 +111,7 @@ public class Tab1 extends Fragment {
         TextView title = view.findViewById(R.id.title_tv);
         title.setText(manga.getTitle());
         TextView cat = view.findViewById(R.id.textView6);
-        String categories = manga.getCategory().replace("[", "").replace("]","").replace("\"", "");
+        String categories = manga.getCategory().stream().collect(Collectors.joining(", "));
         cat.setText(categories);
         TextView status = view.findViewById(R.id.textView4);
         if(manga.getStatus().equals("2"))

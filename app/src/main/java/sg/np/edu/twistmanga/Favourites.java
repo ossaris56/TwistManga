@@ -203,9 +203,14 @@ public class Favourites extends AppCompatActivity {
 
                     for (int i=0; i < array.length(); i++) {
                         JSONObject jo = array.getJSONObject(i);
-
+                        ArrayList<String> categories = new ArrayList<>();
+                        if (jo.getJSONArray("c") != null) {
+                            for (int in=0; in< jo.getJSONArray("c").length(); in++) {
+                                   categories.add(jo.getJSONArray("c").getString(in));
+                            }
+                        }
                         if(db.isFavourite(jo.getString("t"))){
-                            Manga manga = new Manga(jo.getString("t"), ("https://cdn.mangaeden.com/mangasimg/" + jo.getString("im")), jo.getString("c"),jo.getString("s"),jo.getString("i"));
+                            Manga manga = new Manga(jo.getString("t"), ("https://cdn.mangaeden.com/mangasimg/" + jo.getString("im")), categories, jo.getString("s"),jo.getString("i"));
                             mangaList.add(manga);
                             mCount += 1;
                         }

@@ -3,12 +3,13 @@ package sg.np.edu.twistmanga;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Manga implements Parcelable {
     private String mangaTitle;
     private String image_url;
-    private String category;
+    private ArrayList<String> category;
     private String status;
     private String id;
 
@@ -20,7 +21,7 @@ public class Manga implements Parcelable {
     protected Manga(Parcel in) {
         mangaTitle = in.readString();
         image_url = in.readString();
-        category = in.readString();
+        category = in.readArrayList(Manga.class.getClassLoader());
         status = in.readString();
         id = in.readString();
     }
@@ -39,11 +40,11 @@ public class Manga implements Parcelable {
 
     public String getTitle(){return mangaTitle; }
     public String getImage(){return image_url; }
-    public String getCategory(){return category; }
+    public ArrayList<String> getCategory(){return category; }
     public String getStatus(){return status;}
     public String getId(){return id;}
 
-    public Manga(String mangaTitle, String image_url, String category, String status, String id) {
+    public Manga(String mangaTitle, String image_url, ArrayList<String> category, String status, String id) {
         this.mangaTitle = mangaTitle;
         this.image_url = image_url;
         this.category = category;
@@ -67,7 +68,7 @@ public class Manga implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(mangaTitle);
         parcel.writeString(image_url);
-        parcel.writeString(category);
+        parcel.writeList(category);
         parcel.writeString(status);
         parcel.writeString(id);
     }
