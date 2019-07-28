@@ -378,6 +378,15 @@ public class MainActivity extends AppCompatActivity {
                                 return m1.getTitle().compareTo(m2.getTitle());
                             }
                         });
+
+                        Collections.sort(filterResult, new Comparator<Manga>() {
+                            @Override
+                            public int compare(Manga m1, Manga m2) {
+
+                                return m1.getTitle().compareTo(m2.getTitle());
+                            }
+                        });
+
                         mangaAdapter.notifyDataSetChanged();
                         break;
 
@@ -390,6 +399,15 @@ public class MainActivity extends AppCompatActivity {
                                 return m2.getTitle().compareToIgnoreCase(m1.getTitle());
                             }
                         });
+
+                        Collections.sort(filterResult, new Comparator<Manga>() {
+                            @Override
+                            public int compare(Manga m1, Manga m2) {
+
+                                return m2.getTitle().compareToIgnoreCase(m1.getTitle());
+                            }
+                        });
+
                         mangaAdapter.notifyDataSetChanged();
                         break;
                 }
