@@ -20,7 +20,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -95,13 +94,39 @@ public class MainActivity extends AppCompatActivity {
             "Yuri"
     };
     List<String> itemsIntoList;
-    boolean[] mangaSelected = new boolean[]{
+    boolean[] genreSelect = new boolean[]{
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
             false,
             false,
             false,
             false,
             false
     };
+    List<String> selectedGenre;
+    ArrayList filterResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,15 +175,20 @@ public class MainActivity extends AppCompatActivity {
                 {
                     //display manga with ongoing status
                     ongoingList = new ArrayList<Manga>();
+                    int mCount = 0;
                     for(Manga m: mangaList){
 
-                        if(Integer.parseInt(m.getStatus()) == 1){
+                        if(Integer.parseInt(m.getStatus()) <= 1){
 
                             ongoingList.add(m);
+                            mCount += 1;
 
                         }
 
                     }
+
+                    //shows number of manga in app
+                    numManga.setText(mCount + " Manga");
 
                     mangaAdapter = new MangaAdapter(ongoingList, getApplicationContext(),db);
                     recyclerView.setAdapter(mangaAdapter);
@@ -174,15 +204,20 @@ public class MainActivity extends AppCompatActivity {
                 {
                     //display manga with completed status
                     completedList = new ArrayList<Manga>();
+                    int mCount = 0;
                     for(Manga m: mangaList){
 
                         if(Integer.parseInt(m.getStatus()) == 2){
 
                             completedList.add(m);
+                            mCount += 1;
 
                         }
 
                     }
+
+                    //shows number of manga in app
+                    numManga.setText(mCount + " Manga");
 
                     mangaAdapter = new MangaAdapter(completedList, getApplicationContext(),db);
                     recyclerView.setAdapter(mangaAdapter);
@@ -364,7 +399,7 @@ public class MainActivity extends AppCompatActivity {
 
         itemsIntoList = Arrays.asList(filterList);
 
-        filterAlert.setMultiChoiceItems(filterList, mangaSelected, new DialogInterface.OnMultiChoiceClickListener() {
+        filterAlert.setMultiChoiceItems(filterList, genreSelect, new DialogInterface.OnMultiChoiceClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which, boolean isChecked) { }
         });
@@ -376,25 +411,55 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int which) {
                 int a = 0;
-                while(a < mangaSelected.length)
+                List<String> selectedGenre = new ArrayList<String>();
+                filterResult = new ArrayList<Manga>();
+
+                //manga counter
+                int mCount = 0;
+
+                while(a < genreSelect.length)
                 {
-                    boolean value = mangaSelected[a];
+                    boolean value = genreSelect[a];
 
                     if (value){
 
-                        numManga.setText(itemsIntoList.get(a));
+                        selectedGenre.add(itemsIntoList.get(a));
 
                     }
                     a++;
                 }
+
+                //manga filtering process
+                while(a < mangaList.size())
+                {
+                    for(int i = 0; i < selectedGenre.size(); i++){
+
+                        String genre = selectedGenre.get(i);
+                        String mangacat = mangaList.get(a).getCategory();
+
+                        if(mangacat.contains(genre)){
+
+                            //mangaList.remove(mangaList.get(a));
+                            filterResult.add(mangaList.get(a));
+                            mCount += 1;
+
+                        }
+                    }
+                }
+
+                //shows number of manga in app
+                numManga.setText(mCount + " Manga");
+
+                mangaAdapter = new MangaAdapter(filterResult, getApplicationContext(),db);
+                recyclerView.setAdapter(mangaAdapter);
+
+                mangaAdapter.notifyDataSetChanged();
             }
         });
 
         filterAlert.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int which) {
-
-            }
+            public void onClick(DialogInterface dialogInterface, int which) { }
         });
 
         AlertDialog filterDialog = filterAlert.create();

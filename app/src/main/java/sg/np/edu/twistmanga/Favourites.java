@@ -8,11 +8,16 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -41,6 +46,12 @@ public class Favourites extends AppCompatActivity {
     private DrawerLayout dl;
     private ActionBarDrawerToggle abdt;
     DBHandler db = new DBHandler(this,null,null,1);
+    ArrayList ongoingList;
+    ArrayList completedList;
+    TextView numFavs;
+    Button sortBtn;
+    AlertDialog sortAlert;
+    CharSequence[] sortList = {" Name Ascending "," Name Descending "};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,9 +95,28 @@ public class Favourites extends AppCompatActivity {
                 if(id == R.id.ongoingmanga)
                 {
                     //display manga with ongoing status
+                    ongoingList = new ArrayList<Manga>();
+                    int mCount = 0;
+                    for(Manga m: mangaList){
+
+                        if(Integer.parseInt(m.getStatus()) <= 1){
+
+                            ongoingList.add(m);
+                            mCount += 1;
+
+                        }
+
+                    }
+
+                    //shows number of manga favs
+                    numFavs.setText(mCount + " Manga");
+
+                    favouritesAdapter = new FavouritesAdapter(ongoingList, getApplicationContext(),db);
+                    recyclerView.setAdapter(favouritesAdapter);
 
                     DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
                     drawerLayout.closeDrawer(Gravity.LEFT);
+
                     favouritesAdapter.notifyDataSetChanged();
                 }
 
@@ -94,9 +124,28 @@ public class Favourites extends AppCompatActivity {
                 if(id == R.id.completedmanga)
                 {
                     //display manga with completed status
+                    completedList = new ArrayList<Manga>();
+                    int mCount = 0;
+                    for(Manga m: mangaList){
+
+                        if(Integer.parseInt(m.getStatus()) == 2){
+
+                            completedList.add(m);
+                            mCount += 1;
+
+                        }
+
+                    }
+
+                    //shows number of manga favs
+                    numFavs.setText(mCount + " Manga");
+
+                    favouritesAdapter = new FavouritesAdapter(completedList, getApplicationContext(),db);
+                    recyclerView.setAdapter(favouritesAdapter);
 
                     DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
                     drawerLayout.closeDrawer(Gravity.LEFT);
+
                     favouritesAdapter.notifyDataSetChanged();
                 }
                 if(id == R.id.settings)
@@ -114,7 +163,19 @@ public class Favourites extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new SpacesItemDecoration(1));
         mangaList = new ArrayList<>();
+        numFavs = (TextView)findViewById(R.id.numManga);
         showFavourites();
+
+        //sort by button
+        sortBtn = (Button)findViewById(R.id.sortBtn);
+        sortBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                sortAlertDialog();
+
+            }
+        });
     }
 
     //Navbar needs this. Don't touch it jabier.
@@ -137,13 +198,21 @@ public class Favourites extends AppCompatActivity {
 
                     JSONArray array = jsonObject.getJSONArray("manga");
 
+                    //manga counter
+                    int mCount = 0;
+
                     for (int i=0; i < array.length(); i++) {
                         JSONObject jo = array.getJSONObject(i);
+
                         if(db.isFavourite(jo.getString("t"))){
                             Manga manga = new Manga(jo.getString("t"), ("https://cdn.mangaeden.com/mangasimg/" + jo.getString("im")), jo.getString("c"),jo.getString("s"),jo.getString("i"));
                             mangaList.add(manga);
+                            mCount += 1;
                         }
                     }
+
+                    //show number of manga favs
+                    numFavs.setText(mCount + " Manga");
 
                     favouritesAdapter = new FavouritesAdapter(mangaList, getApplicationContext(),db);
                     recyclerView.setAdapter(favouritesAdapter);
@@ -160,6 +229,49 @@ public class Favourites extends AppCompatActivity {
         });
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+    }
+
+    //sorting options method
+    public void sortAlertDialog(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(Favourites.this);
+        builder.setTitle("Sort By...?");
+
+        builder.setSingleChoiceItems(sortList, -1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int item) {
+
+                switch(item)
+                {
+                    case 0:
+                        //Sort according to name ascending
+                        Collections.sort(mangaList, new Comparator<Manga>() {
+                            @Override
+                            public int compare(Manga m1, Manga m2) {
+
+                                return m1.getTitle().compareTo(m2.getTitle());
+                            }
+                        });
+                        favouritesAdapter.notifyDataSetChanged();
+                        break;
+
+                    case 1:
+                        //Sort according to name descending
+                        Collections.sort(mangaList, new Comparator<Manga>() {
+                            @Override
+                            public int compare(Manga m1, Manga m2) {
+
+                                return m2.getTitle().compareToIgnoreCase(m1.getTitle());
+                            }
+                        });
+                        favouritesAdapter.notifyDataSetChanged();
+                        break;
+                }
+                sortAlert.dismiss();
+            }
+        });
+        sortAlert = builder.create();
+        sortAlert.show();
     }
 }
 
