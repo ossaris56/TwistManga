@@ -43,6 +43,7 @@ public class ReadManga extends AppCompatActivity {
         loadUrlJson();
     }
 
+    // Fetches manga images from the api and displays them in a viewpager
     private void loadUrlJson() {
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading...");

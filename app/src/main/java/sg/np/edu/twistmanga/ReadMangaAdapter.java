@@ -23,6 +23,7 @@ public class ReadMangaAdapter extends PagerAdapter {
         this.pages = pages;
     }
 
+    // Binds images to layout
     @Override
     public Object instantiateItem(ViewGroup collection, int position) {
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -30,7 +31,7 @@ public class ReadMangaAdapter extends PagerAdapter {
         ImageView mangaPage = layout.findViewById(R.id.mangaPage);
         String imageURL = "https://cdn.mangaeden.com/mangasimg/" + pages.get(Integer.toString(position));
         DisplayMetrics displayMetrics = new DisplayMetrics();
-        Picasso.get().load(imageURL).resize(collection.getMeasuredWidth(), 0).placeholder(R.drawable.noimage).into(mangaPage);
+        Picasso.get().load(imageURL).resize(collection.getMeasuredWidth(), 0).placeholder(R.drawable.loading).into(mangaPage);
         //Media.setImageFromUrl(mangaPage, imageUrl);//call to GlideApp or Picasso to load the image into the ImageView
         collection.addView(layout);
         return layout;

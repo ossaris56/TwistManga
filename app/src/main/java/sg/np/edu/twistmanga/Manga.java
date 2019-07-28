@@ -18,6 +18,7 @@ public class Manga implements Parcelable {
         return super.equals(obj);
     }
 
+    // Manga class constructor
     protected Manga(Parcel in) {
         mangaTitle = in.readString();
         image_url = in.readString();

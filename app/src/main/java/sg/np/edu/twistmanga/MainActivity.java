@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
     CharSequence[] sortList = {" Name Ascending "," Name Descending "};
     Button filterBtn;
     AlertDialog.Builder filterAlert;
+    // List of genres
     String[] filterList = {
             "Action",
             "Adult",
@@ -270,12 +271,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //Navbar needs this. Don't touch it jabier.
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return abdt.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
+    // Gets the data from the api and displays it in the recyclerview
     private void loadUrlJson() {
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading...");

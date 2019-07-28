@@ -25,6 +25,7 @@ public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.ViewHolder>{
     private Context context;
     private DBHandler db;
 
+    // MangaAdapter Constructor
     public MangaAdapter(List<Manga> mangaList, Context context, DBHandler db) {
         this.mangaList = mangaList;
         this.context = context;
