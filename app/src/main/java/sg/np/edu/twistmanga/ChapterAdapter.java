@@ -47,6 +47,8 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
                 Intent readMangaIntent = new Intent(c, ReadManga.class);
                 String chapterId = chapterIdList.get(position);
                 readMangaIntent.putExtra("chapId", chapterId);
+                ArrayList<String> array = new ArrayList<>(chapterIdList);
+                readMangaIntent.putStringArrayListExtra("nxtchapID",array);
                 c.startActivity(readMangaIntent);
 
             }

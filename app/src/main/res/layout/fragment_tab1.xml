@@ -35,7 +35,7 @@
 
             <TextView
                 android:id="@+id/title_tv"
-                android:layout_width="315dp"
+                android:layout_width="292dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingLeft="10dp"
@@ -46,7 +46,7 @@
 
             <TextView
                 android:id="@+id/textView2"
-                android:layout_width="match_parent"
+                android:layout_width="290dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingLeft="10dp"
@@ -54,7 +54,7 @@
 
             <TextView
                 android:id="@+id/textView3"
-                android:layout_width="match_parent"
+                android:layout_width="290dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingLeft="10dp"
@@ -64,7 +64,7 @@
 
             <TextView
                 android:id="@+id/textView4"
-                android:layout_width="match_parent"
+                android:layout_width="292dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingLeft="10dp"
@@ -90,8 +90,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:text="TextView" />
+        android:paddingRight="10dp" />
 
     <TextView
         android:id="@+id/textView7"
@@ -109,8 +108,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:text="TextView"/>
+        android:paddingRight="10dp" />
 </LinearLayout>
 </ScrollView>
 
