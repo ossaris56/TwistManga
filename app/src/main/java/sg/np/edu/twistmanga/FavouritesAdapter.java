@@ -60,6 +60,10 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Vi
                 {
                     db.deleteFromFavourites(manga);
                     holder.star.setImageResource(R.drawable.ic_star_invis_24dp);
+                    mangaList.remove(position);
+                    notifyItemChanged(position);
+                    notifyItemRangeChanged(position,getItemCount());
+                    notifyDataSetChanged();
                     Toast.makeText(view.getContext(), "Removed from favourites",Toast.LENGTH_SHORT).show();
                 }
             }
