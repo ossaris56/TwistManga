@@ -13,8 +13,13 @@ public class Chapter {
         this.chapImages = chapImages;
     }
 
+    // Gets the chapter ID
     public String getChapId(){return chapId; }
+
+    // Gets the chapter number
     public int getChapNum(){return chapNum; }
+
+    // Gets the chapter images
     public String[] getChapImages(){return chapImages; }
 
 }

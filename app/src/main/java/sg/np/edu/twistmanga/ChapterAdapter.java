@@ -23,6 +23,7 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
     private Context c;
     public TextView txt;
 
+    // ChapterAdapter Constructor
     public ChapterAdapter(ArrayList<String> chapterlist, ArrayList<String> chapterIdList, Context context) {
         this.c = context;
         this.chapterlist = chapterlist;
@@ -46,6 +47,8 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
                 Intent readMangaIntent = new Intent(c, ReadManga.class);
                 String chapterId = chapterIdList.get(position);
                 readMangaIntent.putExtra("chapId", chapterId);
+                ArrayList<String> array = new ArrayList<>(chapterIdList);
+                readMangaIntent.putStringArrayListExtra("nxtchapID",array);
                 c.startActivity(readMangaIntent);
 
             }
@@ -53,11 +56,13 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
 
     }
 
+    // Gets the total number of chapters
     @Override
     public int getItemCount() {
         return chapterlist.size();
     }
 
+    // Gets the item type
     @Override
     public int getItemViewType(int position) {
         return super.getItemViewType(position);

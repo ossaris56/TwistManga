@@ -12,6 +12,7 @@ import com.google.android.material.tabs.TabLayout;
 
 public class Manga_details extends AppCompatActivity implements Tab1.OnFragmentInteractionListener,Tab2.OnFragmentInteractionListener {
 
+    // Wrapper for tabbed views
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

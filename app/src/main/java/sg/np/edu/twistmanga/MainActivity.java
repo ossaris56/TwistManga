@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     MangaAdapter mangaAdapter;
+    MangaAdapter filterAdapter;
     List<Manga> mangaList;
 
     private static final String URL_DATA = "https://www.mangaeden.com/api/list/0/?l=200";
@@ -117,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
     };
     List<String> selectedGenre;
     ArrayList filterResult;
+    boolean isFiltered;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -265,12 +267,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //Navbar needs this. Don't touch it jabier.
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return abdt.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
+    // Gets the data from the api and displays it in the recyclerview
     private void loadUrlJson() {
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading...");
@@ -315,6 +317,7 @@ public class MainActivity extends AppCompatActivity {
 
                    mangaAdapter = new MangaAdapter(mangaList, getApplicationContext(),db);
                    recyclerView.setAdapter(mangaAdapter);
+                   isFiltered = false;
                }
                catch (JSONException e) {
                    e.printStackTrace();
@@ -374,44 +377,54 @@ public class MainActivity extends AppCompatActivity {
                 {
                     case 0:
                         //Sort according to name ascending
-                        Collections.sort(mangaList, new Comparator<Manga>() {
-                            @Override
-                            public int compare(Manga m1, Manga m2) {
+                        if (isFiltered == false){
+                            Collections.sort(mangaList, new Comparator<Manga>() {
+                                @Override
+                                public int compare(Manga m1, Manga m2) {
 
-                                return m1.getTitle().compareTo(m2.getTitle());
-                            }
-                        });
+                                    return m1.getTitle().compareTo(m2.getTitle());
+                                }
+                            });
+                            mangaAdapter.notifyDataSetChanged();
+                        }
 
-                        Collections.sort(filterResult, new Comparator<Manga>() {
-                            @Override
-                            public int compare(Manga m1, Manga m2) {
+                        else{
+                            Collections.sort(filterResult, new Comparator<Manga>() {
+                                @Override
+                                public int compare(Manga m1, Manga m2) {
 
-                                return m1.getTitle().compareTo(m2.getTitle());
-                            }
-                        });
+                                    return m1.getTitle().compareTo(m2.getTitle());
+                                }
+                            });
+                            filterAdapter.notifyDataSetChanged();
+                        }
 
-                        mangaAdapter.notifyDataSetChanged();
                         break;
 
                     case 1:
                         //Sort according to name descending
-                        Collections.sort(mangaList, new Comparator<Manga>() {
-                            @Override
-                            public int compare(Manga m1, Manga m2) {
+                        if (isFiltered == false){
+                            Collections.sort(mangaList, new Comparator<Manga>() {
+                                @Override
+                                public int compare(Manga m1, Manga m2) {
 
-                                return m2.getTitle().compareToIgnoreCase(m1.getTitle());
-                            }
-                        });
+                                    return m2.getTitle().compareToIgnoreCase(m1.getTitle());
+                                }
+                            });
+                            mangaAdapter.notifyDataSetChanged();
+                        }
 
-                        Collections.sort(filterResult, new Comparator<Manga>() {
-                            @Override
-                            public int compare(Manga m1, Manga m2) {
+                        else{
+                            Collections.sort(filterResult, new Comparator<Manga>() {
+                                @Override
+                                public int compare(Manga m1, Manga m2) {
 
-                                return m2.getTitle().compareToIgnoreCase(m1.getTitle());
-                            }
-                        });
+                                    return m2.getTitle().compareToIgnoreCase(m1.getTitle());
+                                }
+                            });
+                            filterAdapter.notifyDataSetChanged();
+                        }
 
-                        mangaAdapter.notifyDataSetChanged();
                         break;
                 }
                 sortAlert.dismiss();
@@ -473,10 +486,11 @@ public class MainActivity extends AppCompatActivity {
                 //shows number of manga in app
                 numManga.setText(mCount + " Manga");
 
-                mangaAdapter = new MangaAdapter(filterResult, getApplicationContext(),db);
-                recyclerView.setAdapter(mangaAdapter);
+                filterAdapter = new MangaAdapter(filterResult, getApplicationContext(),db);
+                recyclerView.setAdapter(filterAdapter);
 
-                mangaAdapter.notifyDataSetChanged();
+                filterAdapter.notifyDataSetChanged();
+                isFiltered = true;
             }
         });
 

@@ -17,6 +17,8 @@ public class settings extends AppCompatActivity {
     RecyclerView rv;
     ArrayList<String> data;
     itemadapter adapter;
+
+    // Creates settings activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

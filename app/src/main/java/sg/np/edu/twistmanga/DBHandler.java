@@ -14,6 +14,8 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String COLUMN_TITLE = "Title";
     public static final String COLUMN_URL = "Url";
 
+
+    // DBHandler Constructor
     public DBHandler(Context context,
                      String name,
                      SQLiteDatabase.CursorFactory factory,
@@ -22,6 +24,7 @@ public class DBHandler extends SQLiteOpenHelper {
         super(context, DATABASE_NAME,factory,DATABASE_VERSION);
     }
 
+    // Creating the Favourites table
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_ACCOUNTS_TABLE = "CREATE TABLE "+ACCOUNTS+
@@ -35,6 +38,7 @@ public class DBHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    // Writes the favourited manga into the database
     public void addToFavourites(Manga manga){
         ContentValues values = new ContentValues();
         values.put(COLUMN_TITLE, manga.getTitle());
@@ -45,12 +49,14 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    // Removes the favourited manga from the database
     public void deleteFromFavourites(Manga manga){
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(ACCOUNTS, COLUMN_TITLE + "=\"" + manga.getTitle()+"\"",null);
         db.close();
     }
 
+    // Checks if the manga is in their favourites
     public boolean isFavourite(String title){
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " +ACCOUNTS+ " WHERE "
