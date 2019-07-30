@@ -63,15 +63,13 @@ public class MainActivity extends AppCompatActivity {
     CharSequence[] sortList = {" Name Ascending "," Name Descending "};
     Button filterBtn;
     AlertDialog.Builder filterAlert;
+    ArrayList<String> excludedCategories = new ArrayList<>();
     String[] filterList = {
             "Action",
-            "Adult",
             "Adventure",
             "Comedy",
             "Drama",
-            "Ecchi",
             "Fantasy",
-            "Gender Bender",
             "Harem",
             "Historical",
             "Horror",
@@ -87,21 +85,12 @@ public class MainActivity extends AppCompatActivity {
             "Shoujo",
             "Shounen",
             "Slice of Life",
-            "Smut",
             "Sports",
             "Supernatural",
-            "Tragedy",
-            "Yaoi",
-            "Yuri"
+            "Tragedy"
     };
     List<String> itemsIntoList;
     boolean[] genreSelect = new boolean[]{
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
             false,
             false,
             false,
@@ -133,6 +122,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        excludedCategories.add("Ecchi");
+        excludedCategories.add("Adult");
+        excludedCategories.add("Gender Bender");
+        excludedCategories.add("Smut");
+        excludedCategories.add("Yaoi");
+        excludedCategories.add("Yuri");
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
@@ -297,14 +292,22 @@ public class MainActivity extends AppCompatActivity {
                        ArrayList<String> categories = new ArrayList<>();
                        JSONObject jo = array.getJSONObject(i);
                        if (jo.getJSONArray("c") != null) {
-                           for (int in=0; in< jo.getJSONArray("c").length(); in++) {
+                           for (int in = 0; in < jo.getJSONArray("c").length(); in++) {
                                categories.add(jo.getJSONArray("c").getString(in));
                            }
                        }
+                       ArrayList<ArrayList<String>> compareCategories = new ArrayList<>();
+                       compareCategories.add(categories);
+                       Log.d("EXCLUDED CATEGORIES : ", excludedCategories.toString());
+                       Log.d("COMPARE CATEGORIES : ", compareCategories.toString());
 
-                       Manga manga = new Manga(jo.getString("t"), ("https://cdn.mangaeden.com/mangasimg/" + jo.getString("im")), categories,jo.getString("s"),jo.getString("i"));
-                       mangaList.add(manga);
-                       mCount += 1;
+
+                       if (Collections.disjoint(excludedCategories, categories)) {
+
+                           Manga manga = new Manga(jo.getString("t"), ("https://cdn.mangaeden.com/mangasimg/" + jo.getString("im")), categories, jo.getString("s"), jo.getString("i"));
+                           mangaList.add(manga);
+                           mCount += 1;
+                       }
                    }
 
                    //shows number of manga in app
